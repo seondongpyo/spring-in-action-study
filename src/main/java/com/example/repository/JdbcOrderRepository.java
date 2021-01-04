@@ -8,7 +8,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +34,7 @@ public class JdbcOrderRepository implements OrderRepository {
 
     @Override
     public Order save(Order order) {
-        order.setPlacedAt(LocalDateTime.now());
+        order.setPlacedAt(new Date());
         long orderId = saveOrderDetails(order);
         order.setId(orderId);
 

@@ -10,9 +10,10 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
 import java.sql.Types;
-import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Date;
 
 @RequiredArgsConstructor
 @Repository
@@ -33,10 +34,13 @@ public class JdbcTacoRepository implements TacoRepository {
     }
 
     private long saveTacoInfo(Taco taco) {
-        taco.setCreatedAt(LocalDateTime.now());
+        taco.setCreatedAt(new Date());
         String sql = "insert into Taco (name, createdAt) values (?, ?)";
-        PreparedStatementCreator psc = new PreparedStatementCreatorFactory(sql, Types.VARCHAR, Types.TIMESTAMP)
-                .newPreparedStatementCreator(Arrays.asList(taco.getName(), taco.getCreatedAt()));
+        PreparedStatementCreatorFactory pscf = new PreparedStatementCreatorFactory(sql, Types.VARCHAR, Types.TIMESTAMP);
+        pscf.setReturnGeneratedKeys(true); // 옵션 추가해야 함!!
+
+        PreparedStatementCreator psc
+                = pscf.newPreparedStatementCreator(Arrays.asList(taco.getName(), new Timestamp(taco.getCreatedAt().getTime())));
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(psc, keyHolder);
