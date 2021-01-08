@@ -44,6 +44,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         // JDBC 기반
         auth.jdbcAuthentication()
-                .dataSource(dataSource);
+                .dataSource(dataSource)
+                // 사용자 정보 쿼리의 커스터마이징
+                // 스프링 시큐리티의 기본 데이터베이스 테이블과 달라도 되지만, 테이블이 갖는 열의 데이터 타입과 길이는 일치해야 한다
+                .usersByUsernameQuery(
+                    "select username, password, enabled from users " + // 사용자 정보 인증 쿼리에서는 username, password, enabled 열의 값을 반환해야 한다
+                    "where username = ?") // 매개변수는 하나이며, username이어야 한다
+                .authoritiesByUsernameQuery(
+                    "select username, authority from authorities " + // 사용자 권한 쿼리에서는 해당 사용자 이름(username), 부여된 권한(authority)을 포함하는 다수의 행을 반환할 수 있다
+                    "where username = ?");
     }
 }
