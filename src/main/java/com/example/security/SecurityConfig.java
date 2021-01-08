@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.sql.DataSource;
 
@@ -52,6 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     "where username = ?") // 매개변수는 하나이며, username이어야 한다
                 .authoritiesByUsernameQuery(
                     "select username, authority from authorities " + // 사용자 권한 쿼리에서는 해당 사용자 이름(username), 부여된 권한(authority)을 포함하는 다수의 행을 반환할 수 있다
-                    "where username = ?");
+                    "where username = ?")
+                .passwordEncoder(new NoEncodingPasswordEncoder()); // 암호화를 사용하지 않는 비밀번호 인코더(임시)
     }
 }
