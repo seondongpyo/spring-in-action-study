@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Taco Cloud</title>
+</head>
+<body>
+    <h1>Login</h1>
+    <img th:src="@{/images/TacoCloud.png}" alt="Taco Cloud"/>
+
+    <div th:if="${error}">
+        Unable to login. Check your username and password.
+    </div>
+
+    <p>
+        New here? Click
+        <a th:href="@{/register}">here</a> to register.
+    </p>
+
+    <!-- tag::thAction[] -->
+    <!--
+        스프링 시큐리티는 기본적으로 /login 경로로 로그인 요청을 처리하며,
+        사용자 이름과 비밀번호 필드의 이름은 username과 password로 간주한다
+    -->
+    <form method="POST" th:action="@{/login}" id="loginForm">
+    <!-- end::thAction[] -->
+        <label for="username">Username: </label>
+        <input type="text" id="username" name="username"><br/>
+
+        <label for="password">Password: </label>
+        <input type="password" id="password" name="password"><br/>
+
+        <input type="submit" th:value="Login">
+    </form>
+</body>
+</html>

@@ -17,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     //    private final DataSource dataSource;
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     @Bean
     public PasswordEncoder encoder() {
@@ -27,12 +27,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/design", "/orders")
-                .access("hasRole('ROLE_USER')")
-                .antMatchers("/", "/**")
-                .access("permitAll")
-                .and()
-                .httpBasic();
+            .antMatchers("/design", "/orders")
+            .access("hasRole('ROLE_USER')")
+            .antMatchers("/", "/**")
+            .access("permitAll")
+
+            .and()
+            .formLogin()
+            .loginPage("/login")
+
+            .and()
+            .logout()
+            .logoutSuccessUrl("/")
+
+            .and()
+            .csrf(); // CSRF(Cross-Site Request Forgery(크로스 사이트 요청 위조)) 공격 방어
     }
 
     @Override
