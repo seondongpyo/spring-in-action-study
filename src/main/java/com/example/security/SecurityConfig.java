@@ -1,22 +1,28 @@
 package com.example.security;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import javax.sql.DataSource;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    private final DataSource dataSource;
+    //    private final DataSource dataSource;
+    private UserDetailsService userDetailsService;
+
+    @Bean
+    public PasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -44,6 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
          */
 
         // JDBC 기반
+        /*
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
                 // 사용자 정보 쿼리의 커스터마이징
@@ -55,5 +62,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     "select username, authority from authorities " + // 사용자 권한 쿼리에서는 해당 사용자 이름(username), 부여된 권한(authority)을 포함하는 다수의 행을 반환할 수 있다
                     "where username = ?")
                 .passwordEncoder(new NoEncodingPasswordEncoder()); // 암호화를 사용하지 않는 비밀번호 인코더(임시)
+         */
+
+        // 커스텀 사용자 명세 서비스
+        auth.userDetailsService(userDetailsService)
+            .passwordEncoder(encoder());
     }
 }
