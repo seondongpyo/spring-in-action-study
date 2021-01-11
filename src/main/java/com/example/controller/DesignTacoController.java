@@ -58,6 +58,7 @@ public class DesignTacoController {
 //        model.addAttribute("taco", new Taco());
         String username = principal.getName();
         User user = userRepository.findByUsername(username);
+        log.info("user : " + user);
         model.addAttribute("user", user);
 
         return "design";
