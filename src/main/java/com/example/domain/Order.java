@@ -25,6 +25,9 @@ public class Order implements Serializable {
 
     private Date placedAt;
 
+    @ManyToOne
+    private User user; // 한 명의 사용자는 여러 주문을 가질 수 있다
+
     @NotBlank(message = "Name is required")
     private String deliveryName;
 
