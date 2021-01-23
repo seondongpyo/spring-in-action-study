@@ -1,0 +1,26 @@
+spring:
+  # DevTools
+  devtools:
+    livereload:
+      enabled: true
+    remote:
+      restart:
+        enabled: false
+  thymeleaf:
+    cache: false
+
+  # H2
+  h2:
+    console:
+      enabled: true
+
+  # Datasource
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    driver-class-name: org.h2.Driver
+
+  # 커스텀 구성 속성 추가
+  taco:
+    orders:
+      pageSize: 10
