@@ -6,6 +6,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 
 @SpringBootApplication
 public class SpringInActionStudyApplication {
@@ -15,6 +16,8 @@ public class SpringInActionStudyApplication {
     }
 
     @Bean
+    @Profile("dev") // 개발 환경에서만 실행되도록 설정
+//    @Profile("!prod") // 운영 환경 이외의 환경에서 실행되도록 설정
     public CommandLineRunner dataLoader(IngredientRepository ingredientRepository) {
         return new CommandLineRunner() {
             @Override
