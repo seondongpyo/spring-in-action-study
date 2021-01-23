@@ -20,7 +20,7 @@ spring:
     username: sa
     driver-class-name: org.h2.Driver
 
-  # 커스텀 구성 속성 추가
-  taco:
-    orders:
-      pageSize: 10
+# 커스텀 구성 속성 추가
+taco:
+  orders:
+    pageSize: 10

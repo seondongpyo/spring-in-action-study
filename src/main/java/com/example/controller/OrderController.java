@@ -3,9 +3,9 @@ package com.example.controller;
 import com.example.domain.Order;
 import com.example.domain.User;
 import com.example.repository.OrderRepository;
+import com.example.web.OrderProps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,11 +22,10 @@ import javax.validation.Valid;
 @Controller
 @SessionAttributes("order")
 @RequestMapping("/orders")
-@ConfigurationProperties(prefix = "taco.orders") // 커스텀 구성 속성을 사용하기 위한 설정
 public class OrderController {
 
     private final OrderRepository orderRepository;
-    private int pageSize = 20;
+    private final OrderProps orderProps; // 구성 속성 홀더 빈을 주입
 
     @GetMapping("/current")
     public String orderForm(@AuthenticationPrincipal User user,
@@ -75,7 +74,7 @@ public class OrderController {
 
     @GetMapping
     public String ordersForUser(@AuthenticationPrincipal User user, Model model) {
-        Pageable pageable = PageRequest.of(0, pageSize); // 최근 n개의 데이터만 조회하고자 할 경우
+        Pageable pageable = PageRequest.of(0, orderProps.getPageSize()); // 최근 n개의 데이터만 조회하고자 할 경우
         model.addAttribute("orders", orderRepository.findByUserOrderByPlacedAtDesc(user, pageable));
         
         return "orderList";
